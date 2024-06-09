@@ -1,6 +1,0 @@
-Prueba
-Modifico este archivo para generar un conflicto
-
-Añado otro parrafo en el repositorio local
-
-Añado un párrafo diferente en el remoto
