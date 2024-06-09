@@ -1,2 +1,4 @@
 Prueba
 Modifico este archivo para generar un conflicto
+
+Añado un párrafo diferente en el remoto
