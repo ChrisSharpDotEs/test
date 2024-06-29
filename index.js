@@ -20,10 +20,12 @@ $(document).ready(function() {
         data: jsonData,
         columns: columnas
     });
+
+    document.querySelector('table').style.width = '100%';
 });
 
 function createTable(jsonData){
-    let div = document.getElementsByClassName('container')[0];
+    let div = document.getElementsByClassName('container')[1];
 
     let table = document.createElement('table');
     table.classList.add('table', 'table-hover');
