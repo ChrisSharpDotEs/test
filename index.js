@@ -1,48 +1,87 @@
-$(document).ready(function() {
-    // Definir el JSON con los datos
-    var jsonData = [
-        {"nombre": "Juan", "edad": 30, "ciudad": "Madrid"},
-        {"nombre": "María", "edad": 25, "ciudad": "Barcelona"},
-        {"nombre": "Carlos", "edad": 35, "ciudad": "Valencia"},
-        {"nombre": "Ana", "edad": 28, "ciudad": "Sevilla"}
-    ];
+/**
+ * Los datos que recibe la tabla debe ser un objeto o un array de objetos:
+ * [
+ *      {id: 1, prop1: valor, ...},
+ *      {id: 1, prop1: valor, ...}
+ * ]
+ * 
+ * Si utilizamos un objeto tipo {tabla1: [objeto1, objeto2], tabla2: [objeto1, objeto2...]...} se descompone el objeto en tablas
+ */
 
-    createTable(jsonData);
+const TableGenerator = {
 
-    let columnas = [];
+    init(idElement, tableData, options){
+        if(Array.isArray(tableData)){
+            $(idElement).append(this.createTable(tableData, options));
+        }
+        else if(Object.keys(tableData).length > 0){
+            let that = this;
+            $.each(Object.values(tableData), function(index, table){
+                $(idElement).append(that.createTable(table, options));
+            })
+        }
+    },
 
-    Object.keys(jsonData[0]).forEach(key => {
-        columnas.push({data: key});
-    });
+    createTable(tableData, options){
+        return $('<table>', {class: options.tableClasses.join(' ')}).append(
+            this.createHeader(tableData[0]),
+            this.createTbody(tableData)
+        )
+    },
 
-    // Inicializar DataTable
-    $('#miTabla').DataTable({
-        data: jsonData,
-        columns: columnas
-    });
-});
+    createHeader(rowInfo){
+        let tr = $('<tr>');
 
-function createTable(jsonData){
-    let div = document.getElementsByClassName('container')[0];
+        $.each(Object.keys(rowInfo), (index, key) => {
+            tr.append($('<th>').text(key));
+        });
 
-    let table = document.createElement('table');
-    table.classList.add('table', 'table-hover');
-    table.setAttribute('id', 'miTabla');
+        return $('<thead>').append(tr);
+    },
 
-    let thead = document.createElement('thead');
-    let tbody = document.createElement('tbody');
+    /**
+     * 
+     * @param {*} rows Es un array de objetos
+     */
+    createTbody(rows){
+        let tbody = $('<tbody>');
+        let that = this;
+        $.each(rows, function(index, rowInfo){
+            tbody.append(
+                that.createRow(rowInfo)
+            );
+        });
+        return tbody;
+    },
 
-    let tr = document.createElement('tr');
+    /**
+     * Crea una fila por cada objeto del array
+     * @param {*} rowInfo Es un objeto
+     */
+    createRow(rowInfo){
+        let tr = $('<tr>');
+        $.each(Object.values(rowInfo), function(index, value){
+            console.log(value);
+            tr.append($('<td>').text(value))
+        });
 
-    Object.keys(jsonData[0]).forEach(key => {
-        let th = document.createElement('th');
-        th.innerHTML = key;
-        tr.append(th);
-    });
-
-    thead.append(tr);
-
-    table.append(thead);
-    table.append(tbody);
-    div.append(table);
+        return tr;
+    }
 }
+
+let data = {
+    usuarios:[
+        {id: 1, nombre: 'Juan'},
+        {id: 2, nombre: 'Michael'}
+    ]
+};
+
+let options = {
+    tableClasses: ['table', 'table-hover'],
+    tHeadClasses: [],
+    tRowClasses: [],
+    tdClasses: []
+}
+
+window.addEventListener('load', () => TableGenerator.init('#example', data, options));
+
