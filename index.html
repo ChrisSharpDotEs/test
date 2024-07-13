@@ -72,7 +72,7 @@
                 <form action="">
                     <div class="mb-3">
                         <label for="element" class="form-label">Elemento</label>
-                        <textarea class="form-control" name="element" id="element" rows="3"></textarea>
+                        <textarea class="form-control" name="element" id="element" rows="20"></textarea>
                     </div>
                     <button id="convert" class="btn btn-primary" type="button">
                         Convertir
@@ -80,9 +80,12 @@
 
                 </form>
             </div>
-            <div id="output">
-                <div class="border bg-white p-3 rounded">
-                    
+            <div class="row">
+                <div class="col-lg-5" id="output">
+
+                </div>
+                <div class="col-lg-5">
+
                 </div>
             </div>
         </div>
@@ -91,8 +94,8 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script>
-        $('.container').append(
-            $('<form>', {class: 'd-flex flex-column gap-2'}).append($('<div>', {class: 'mb-3'}).append($('<label>', {class: 'form-label'}).text('Email'), $('<input>', {class: 'form-control'}), $('<small>', {class: 'form-text text-muted'})), $('<div>', {class: 'mb-3'}).append($('<label>', {class: 'form-label'}).text('Password'), $('<input>', {class: 'form-control'}), $('<div>', {class: 'form-text'}).text('Your password must be 8-20 characters long, contain letters and numbers, and must not                    contain spaces, special characters, or emoji.')), $('<div>', {class: 'mb-3'}).append($('<label>', {class: 'form-label'}).text('Confirmar password'), $('<input>', {class: 'form-control'})), $('<div>', {class: 'form-check form-switch my-3'}).append($('<input>', {class: 'form-check-input p-2'}), $('<label>', {class: 'form-check-label px-2'}).text('Debe aceptar los .')), $('<div>', {class: 'form-check form-switch mb-3'}).append($('<input>', {class: 'form-check-input p-2'}), $('<label>', {class: 'form-check-label px-2'}).text('Debe aceptar que ha leído nuestra .')), $('<div>', {class: 'form-group my-2'}))
+        $('#output').append(
+           
         )
     </script>
 </body>

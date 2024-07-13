@@ -21,36 +21,46 @@ window.addEventListener('load', () => {
     function getDirectTextContent(element) {
         let text = '';
         element.childNodes.forEach(node => {
+            
             if (node.nodeType === Node.TEXT_NODE) {
-                text += node.textContent.trim() + ' ';
+                text += node.textContent.trim();
             }
         });
-        return text.trim().replace('\n', '').replace('\t');
+        return text.trim().replace('\n', '').replace('\t', '').replace(/(\s)\1{2,}/g, '');
     }
 
     function getItems(parent) {
         let result = '';
         if (parent.children.length > 0) {
             let clases = parent.className ? `, {class: '${parent.className}'}` : '';
-            result += `$('<${parent.nodeName.toLowerCase()}>'${clases}).append(${secondlevel(parent)})`;
+            result += `$('<${parent.nodeName.toLowerCase()}>'${clases}).append(\n${secondlevel(parent)}\n)`;
         }
 
         function secondlevel(parent) {
             let innercontent = '';
             [...parent.children].forEach((item, index) => {
-                let clases = item.className ? `, {class: '${item.className}'}` : '';
+                
                 let text = '';
+                let attrs = [...item.attributes];
+                
+                let clases = ', {';
+                attrs.forEach(attr => {
+                    let attributename = attr.name.includes('-') ? `'${attr.name}'` : attr.name;
+                    clases += ` ${attributename}: '${attr.nodeValue}',`;
+                });
+                clases = clases.slice(0, -1);
+                clases += ' }';
 
                 text = getDirectTextContent(item) !== '' ? `.text('${getDirectTextContent(item)}')` : '';
 
                 if (parent.children.length > 0 && index < parent.children.length && index > 0) {
-                    innercontent += `, $('<${item.nodeName.toLowerCase()}>'${clases})${text}`;
+                    innercontent += `, \n$('<${item.nodeName.toLowerCase()}>'${clases})${text}`;
                 } else {
                     innercontent += `$('<${item.nodeName.toLowerCase()}>'${clases})${text}`;
                 }
 
-                if (item.children.length > 0 && index < parent.children.length - 1) {
-                    innercontent += `.append(${secondlevel(item)})`;
+                if (item.children.length > 0 && index < parent.children.length) {
+                    innercontent += `.append(\n${secondlevel(item)}\n)`;
                 }
             });
             return innercontent;
